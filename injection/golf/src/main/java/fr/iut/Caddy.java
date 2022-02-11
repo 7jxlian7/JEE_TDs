@@ -1,24 +1,25 @@
 package fr.iut;
 
-import fr.iut.club.Putter;
-import fr.iut.club.Wood;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 /**
- * A caddy has several clubs and knows which club to use depending on conditions
+ * A caddy has several clubs and know which club to use depending on conditions
  */
 public class Caddy {
-    private Club putter = new Putter();
-    private Club wood = new Wood();
+    @Inject
+    @Named("Putter")
+    private Club putter;
 
-    /**
-     * default empty constructor *
-     */
+    @Inject
+    @Named("Wood")
+    private Club wood;
+
     public Caddy() {  }
 
     /**
-     * Return
-     * @param conditions conditions depending on the following shot
-     * @return the club that is the best to use
+     * @param conditions
+     * @return the appropriate club according to conditions
      */
     public Club getClub(final Conditions conditions) {
         switch (conditions) {
