@@ -18,7 +18,7 @@ public class Caddy {
     public Caddy() {  }
 
     /**
-     * @param conditions
+     * @param conditions depending on which surface the ball is located
      * @return the appropriate club according to conditions
      */
     public Club getClub(final Conditions conditions) {
