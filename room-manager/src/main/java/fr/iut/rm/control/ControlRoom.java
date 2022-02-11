@@ -59,11 +59,15 @@ public class ControlRoom {
         unitOfWork.begin();
 
         // TODO check unicity
+        if(roomDao.findByName(name) == null) {
+            Room room = new Room();
+            room.setName(name);
+            room.setDescription(description);
+            roomDao.saveOrUpdate(room);
+        } else {
+            System.out.println(String.format("Room '%s' already exists", name));
+        }
 
-        Room room = new Room();
-        room.setName(name);
-        room.setDescription(description);
-        roomDao.saveOrUpdate(room);
         unitOfWork.end();
     }
 
