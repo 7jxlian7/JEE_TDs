@@ -67,4 +67,17 @@ public class ControlRoom {
         unitOfWork.end();
     }
 
+    /**
+     * Removes a room in DB
+     *
+     * @param name the name of the room
+     */
+    public void removeRoom(final String name) {
+        unitOfWork.begin();
+        Room r = roomDao.findByName(name);
+        if(r != null) // if room exists
+            roomDao.removeRoom(name);
+        unitOfWork.end();
+    }
+
 }
