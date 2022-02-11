@@ -51,7 +51,7 @@ public final class App {
     public App() {
         // build options command line options
         options.addOption(OptionBuilder.withDescription("List all rooms").create(LIST));
-        options.addOption(OptionBuilder.withArgName("name").hasArg().withDescription("Create new room").create(CREATE));
+        options.addOption(OptionBuilder.withArgName("name description").hasArgs(2).withDescription("Create new room").create(CREATE));
         options.addOption(OptionBuilder.withDescription("Display help message").create(HELP));
         options.addOption(OptionBuilder.withDescription("Quit").create(QUIT));
     }
@@ -79,9 +79,11 @@ public final class App {
                 } else if (cmd.hasOption(LIST)) {
                     cr.showRooms();
                 } else if (cmd.hasOption(CREATE)) {
-                    String name = cmd.getOptionValue(CREATE);
-                    if (name != null && !name.isEmpty()) {
-                        cr.createRoom(name);
+                    String args[] = cmd.getOptionValues(CREATE);
+                    String name = args[0];
+                    String description = args[1];
+                    if (name != null && !name.isEmpty() && description != null && !description.isEmpty()) {
+                        cr.createRoom(name, description);
                     }
                 }
 

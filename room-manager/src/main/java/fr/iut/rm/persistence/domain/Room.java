@@ -1,6 +1,7 @@
 package fr.iut.rm.persistence.domain;
 
 import javax.persistence.*;
+import jakarta.validation.constraints.*;
 
 /**
  * A classic room
@@ -20,6 +21,13 @@ public class Room {
      */
     @Column(nullable = false, unique = true)
     private String name;
+
+    /**
+     * Room's description
+     */
+    @Column()
+    @Size(max = 10)
+    private String description;
 
     /**
      * Default constructor (do nothing)
@@ -62,6 +70,24 @@ public class Room {
      */
     public void setName(final String name) {
         this.name = name;
+    }
+
+    /**
+     * anemic getter
+     *
+     * @return the calling number
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * anemic setter
+     *
+     * @param description the new calling number to set
+     */
+    public void setDescription(final String description) {
+        this.description = description;
     }
 
 }

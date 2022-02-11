@@ -43,7 +43,7 @@ public class ControlRoom {
             System.out.println("Rooms :");
             System.out.println("--------");
             for (Room room : rooms) {
-                System.out.println(String.format("   [%d], name '%s'", room.getId(), room.getName()));
+                System.out.println(String.format("   [%d], name '%s' | description '%s'", room.getId(), room.getName(), room.getDescription()));
             }
         }
 
@@ -55,13 +55,14 @@ public class ControlRoom {
      *
      * @param name the name of the room
      */
-    public void createRoom(final String name) {
+    public void createRoom(final String name, final String description) {
         unitOfWork.begin();
 
         // TODO check unicity
 
         Room room = new Room();
         room.setName(name);
+        room.setDescription(description);
         roomDao.saveOrUpdate(room);
         unitOfWork.end();
     }
