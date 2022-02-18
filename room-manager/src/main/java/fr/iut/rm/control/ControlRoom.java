@@ -9,8 +9,7 @@ import fr.iut.rm.persistence.domain.Room;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by cjohnen on 02/02/17.
@@ -103,7 +102,7 @@ public class ControlRoom {
 
         Room room = roomDao.findByName(roomName);
         if(room == null){
-            System.out.println(String.format("Room '%s' does not exists", roomName));
+            System.out.println(String.format("There is no room named %s", roomName));
             unitOfWork.end();
             return;
         }
@@ -152,7 +151,7 @@ public class ControlRoom {
         // check if the room exist
         Room room = roomDao.findByName(roomName);
         if(room == null){
-            System.out.println(String.format("Room '%s' does not exists", roomName));
+            System.out.println(String.format("There is no room named %s", roomName));
             unitOfWork.end();
             return;
         }
@@ -160,21 +159,21 @@ public class ControlRoom {
         // check if the user has entered at least one room
         AccessEvent accessEvent = accessEventDao.findLastBy(username);
         if(accessEvent == null) {
-            System.out.println(String.format("User '%s' has not entered any room", username));
+            System.out.println(String.format("%s has not entered any room", username));
             unitOfWork.end();
             return;
         }
 
         // check if the user is out
         if(accessEvent.isOut()){
-            System.out.println(String.format("User '%s' is not in the room '%s'", username, roomName));
+            System.out.println(String.format("%s is not in the room %s", username, roomName));
             unitOfWork.end();
             return;
         }
 
         // check if the user is not in another room
         if(!accessEvent.getRoom().getName().equals(roomName)){
-            System.out.println(String.format("User '%s' is in the room '%s'", username, accessEvent.getRoom().getName()));
+            System.out.println(String.format("%s is in the room %s", username, accessEvent.getRoom().getName()));
             unitOfWork.end();
             return;
         }
@@ -188,7 +187,7 @@ public class ControlRoom {
         ae.setPersonName(username);
         ae.setDate(date);
 
-        System.out.println(String.format("User %s has left the room %s", username, roomName));
+        System.out.println(String.format("%s has left the room %s", username, roomName));
 
         accessEventDao.saveOrUpdate(ae);
         unitOfWork.end();
@@ -205,7 +204,7 @@ public class ControlRoom {
         Room r = roomDao.findByName(room);
 
         if(r == null){
-            System.out.println(String.format("Room '%s' does not exists", room));
+            System.out.println(String.format("There is no room named %s", room));
             unitOfWork.end();
             return;
         }
@@ -213,14 +212,40 @@ public class ControlRoom {
         // getting all the events in a room
         List<AccessEvent> accessEvents = accessEventDao.findAllByRoom(r);
 
+        List<String> usersInTheRoom = new ArrayList<String>();
+
+        // reverse the list
+        for (int i = 0, j = accessEvents.size() - 1; i < j; i++) {
+            accessEvents.add(i, accessEvents.remove(j));
+        }
+
+        for (AccessEvent ae : accessEvents) {
+            if(!usersInTheRoom.contains(ae.getPersonName()) && !ae.isOut()){
+                usersInTheRoom.add(ae.getPersonName());
+            } else if(usersInTheRoom.contains(ae.getPersonName())) {
+                usersInTheRoom.remove(ae.getPersonName());
+            }
+        }
+
+        // reverse the list again
+        for (int i = 0, j = accessEvents.size() - 1; i < j; i++) {
+            accessEvents.add(i, accessEvents.remove(j));
+        }
+
         if (accessEvents.isEmpty()) {
             System.out.println(String.format("No access event on the room '%s'", r.getName()));
         } else {
             System.out.println(String.format("Access events on room '%s' :", r.getName()));
             System.out.println("--------");
+            System.out.println(String.format("Current users in the room (%d) :", usersInTheRoom.size()));
+            for (String user : usersInTheRoom) {
+                System.out.println(user);
+            }
+            System.out.println("--------");
             for (AccessEvent accessEvent : accessEvents) {
                 String action = accessEvent.isOut() ? "left" : "entered";
-                System.out.println(String.format("   %s has %s the room [%s] at %s", accessEvent.getPersonName(), action, r.getName(), accessEvent.getDate()));
+                String fleche = accessEvent.isOut() ? "<-----" : "----->";
+                System.out.println(String.format("   %s  %s has %s the room [%s] at %s", fleche, accessEvent.getPersonName(), action, r.getName(), accessEvent.getDate()));
             }
         }
 
@@ -239,13 +264,14 @@ public class ControlRoom {
         List<AccessEvent> accessEvents = accessEventDao.findAllByPerson(person);
 
         if (accessEvents.isEmpty()) {
-            System.out.println(String.format("No access event for this person '%s'", person));
+            System.out.println(String.format("%s has not moved", person));
         } else {
-            System.out.println(String.format("Access events for the person '%s' :", person));
+            System.out.println(String.format("%s's moves :", person));
             System.out.println("--------");
             for (AccessEvent accessEvent : accessEvents) {
                 String action = accessEvent.isOut() ? "left" : "entered";
-                System.out.println(String.format("   %s has %s the room [%s] at %s", person, action, accessEvent.getRoom().getName(), accessEvent.getDate()));
+                String fleche = accessEvent.isOut() ? "<-----" : "----->";
+                System.out.println(String.format("   %s  %s has %s the room [%s] at %s", fleche, person, action, accessEvent.getRoom().getName(), accessEvent.getDate()));
             }
         }
 
