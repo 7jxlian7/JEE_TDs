@@ -76,6 +76,8 @@ public class RoomDaoImpl implements RoomDao {
     }
 
     /**
+     * Remove a room.
+     *
      * @param name  of the room
      * @return the corresponding room or null if nothing found
      */
@@ -83,8 +85,6 @@ public class RoomDaoImpl implements RoomDao {
     @Transactional
     public void removeRoom(final String name) {
         em.get().remove(findByName(name));
-
         logger.debug("Removed room with name '{}'", name);
     }
-
 }

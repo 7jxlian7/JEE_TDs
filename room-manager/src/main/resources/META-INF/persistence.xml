@@ -12,7 +12,6 @@
         <class>fr.iut.rm.persistence.domain.Room</class>
 
         <properties>
-<!--            <property name="hibernate.hbm2ddl.auto" value="create-drop"/> -->
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.showSql" value="true"/>
 

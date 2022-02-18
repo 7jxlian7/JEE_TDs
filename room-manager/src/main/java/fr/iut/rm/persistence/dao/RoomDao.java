@@ -34,5 +34,4 @@ public interface RoomDao {
      * @param name object to delete
      */
     void removeRoom(String name);
-
 }

@@ -33,6 +33,25 @@ public final class App {
      */
     private static final String REMOVE = "r";
     /**
+     * enter a room constant
+     */
+    private static final String ENTER_ROOM = "e";
+
+    /**
+     * leave a room constant
+     */
+    private static final String LEAVE_ROOM = "p";
+
+    /**
+     * log room constant
+     */
+    private static final String LOG_ROOM = "log";
+
+    /**
+     * person movements room constant
+     */
+    private static final String PERSON_MOVES = "moves";
+    /**
      * list constant
      */
     private static final String LIST = "l";
@@ -47,7 +66,7 @@ public final class App {
     private final Options options = new Options();
 
     @Inject
-     ControlRoom cr;
+    ControlRoom cr;
 
     /**
      * Invoked at module initialization time
@@ -57,6 +76,10 @@ public final class App {
         options.addOption(OptionBuilder.withDescription("List all rooms").create(LIST));
         options.addOption(OptionBuilder.withArgName("name description").hasArgs(2).withDescription("Create new room").create(CREATE));
         options.addOption(OptionBuilder.withArgName("name").hasArgs().withDescription("Remove a room").create(REMOVE));
+        options.addOption(OptionBuilder.withArgName("person room").hasArgs(2).withDescription("Enter a room").create(ENTER_ROOM));
+        options.addOption(OptionBuilder.withArgName("person room").hasArgs(2).withDescription("Leave a room").create(LEAVE_ROOM));
+        options.addOption(OptionBuilder.withArgName("room").hasArgs().withDescription("Show room activity").create(LOG_ROOM));
+        options.addOption(OptionBuilder.withArgName("person").hasArgs().withDescription("Show person's moves").create(PERSON_MOVES));
         options.addOption(OptionBuilder.withDescription("Display help message").create(HELP));
         options.addOption(OptionBuilder.withDescription("Quit").create(QUIT));
     }
@@ -86,7 +109,7 @@ public final class App {
                 } else if (cmd.hasOption(CREATE)) {
                     String args[] = cmd.getOptionValues(CREATE);
                     String name = args[0];
-                    String description = args[1];
+                    String description = args.length > 1 ? args[1] : "No description";
                     if (name != null && !name.isEmpty() && description != null && !description.isEmpty()) {
                         cr.createRoom(name, description);
                     }
@@ -94,6 +117,32 @@ public final class App {
                     String name = cmd.getOptionValue(REMOVE);
                     if(name != null && !name.isEmpty()){
                         cr.removeRoom(name);
+                    }
+                } else if (cmd.hasOption(ENTER_ROOM)) {
+                    String args[] = cmd.getOptionValues(ENTER_ROOM);
+                    String person = args[0];
+                    String room = args[1];
+                    if (person != null && !person.isEmpty() && room != null && !room.isEmpty()) {
+                        cr.enterRoom(person, room);
+                    }
+                } else if (cmd.hasOption(LEAVE_ROOM)) {
+                    String args[] = cmd.getOptionValues(LEAVE_ROOM);
+                    String person = args[0];
+                    String room = args[1];
+                    if (person != null && !person.isEmpty() && room != null && !room.isEmpty()) {
+                        cr.leaveRoom(person, room);
+                    }
+                } else if (cmd.hasOption(LOG_ROOM)) {
+                    String args[] = cmd.getOptionValues(LOG_ROOM);
+                    String room = args[0];
+                    if (room != null && !room.isEmpty()) {
+                        cr.showRoomActivity(room);
+                    }
+                } else if (cmd.hasOption(PERSON_MOVES)) {
+                    String args[] = cmd.getOptionValues(PERSON_MOVES);
+                    String person = args[0];
+                    if (person != null && !person.isEmpty()) {
+                        cr.showPersonActivity(person);
                     }
                 }
 
