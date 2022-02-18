@@ -108,20 +108,20 @@ public class ControlRoom {
             return;
         }
 
-        // On récupère la dernière action de l'utilisateur
+        // getting the last activity of the person
         AccessEvent accessEvent = accessEventDao.findLastBy(username);
         if(accessEvent != null){
-            // Si il est a l'intérieur d'une room
+            // is he in a room?
             if (!accessEvent.isOut()) {
-                // Si il veut entrer dans une room dans laquelle il est déjà
+                // if he wants to enter the room that he is in (he can't)
                 if(accessEvent.getRoom().getName().equals(roomName)){
                     System.out.println(String.format("User '%s' is already in the room '%s'", username, roomName));
                     unitOfWork.end();
                     return;
                 }
-                // Si il veut entrer dans une autre room
+                // if he wants to enter anither the room (he must leave one before)
                 unitOfWork.end();
-                leaveRoom(username, accessEvent.getRoom().getName()); // Il quitte sa room actuelle
+                leaveRoom(username, accessEvent.getRoom().getName());
                 unitOfWork.begin();
             }
         }
@@ -133,6 +133,8 @@ public class ControlRoom {
         ae.setIsOut(false);
         ae.setPersonName(username);
         ae.setDate(date);
+
+        System.out.println(String.format("User %s has entered the room %s", username, roomName));
 
         accessEventDao.saveOrUpdate(ae);
         unitOfWork.end();
@@ -146,8 +148,8 @@ public class ControlRoom {
      */
     public void leaveRoom(final String username, final String roomName) {
         unitOfWork.begin();
-        // check if the room exist
 
+        // check if the room exist
         Room room = roomDao.findByName(roomName);
         if(room == null){
             System.out.println(String.format("Room '%s' does not exists", roomName));
@@ -155,6 +157,7 @@ public class ControlRoom {
             return;
         }
 
+        // check if the user has entered at least one room
         AccessEvent accessEvent = accessEventDao.findLastBy(username);
         if(accessEvent == null) {
             System.out.println(String.format("User '%s' has not entered any room", username));
@@ -162,12 +165,21 @@ public class ControlRoom {
             return;
         }
 
+        // check if the user is out
         if(accessEvent.isOut()){
             System.out.println(String.format("User '%s' is not in the room '%s'", username, roomName));
             unitOfWork.end();
             return;
         }
 
+        // check if the user is not in another room
+        if(!accessEvent.getRoom().getName().equals(roomName)){
+            System.out.println(String.format("User '%s' is in the room '%s'", username, accessEvent.getRoom().getName()));
+            unitOfWork.end();
+            return;
+        }
+
+        // making the user leave the room
         AccessEvent ae = new AccessEvent();
         Date date = new Date();
 
@@ -175,6 +187,8 @@ public class ControlRoom {
         ae.setIsOut(true);
         ae.setPersonName(username);
         ae.setDate(date);
+
+        System.out.println(String.format("User %s has left the room %s", username, roomName));
 
         accessEventDao.saveOrUpdate(ae);
         unitOfWork.end();
@@ -195,6 +209,8 @@ public class ControlRoom {
             unitOfWork.end();
             return;
         }
+
+        // getting all the events in a room
         List<AccessEvent> accessEvents = accessEventDao.findAllByRoom(r);
 
         if (accessEvents.isEmpty()) {
@@ -219,6 +235,7 @@ public class ControlRoom {
     public void showPersonActivity(final String person) {
         unitOfWork.begin();
 
+        // getting of the person's activities
         List<AccessEvent> accessEvents = accessEventDao.findAllByPerson(person);
 
         if (accessEvents.isEmpty()) {

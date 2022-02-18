@@ -35,12 +35,12 @@ public final class App {
     /**
      * enter a room constant
      */
-    private static final String ENTER_ROOM = "e";
+    private static final String ENTER_ROOM = "enter";
 
     /**
      * leave a room constant
      */
-    private static final String LEAVE_ROOM = "p";
+    private static final String LEAVE_ROOM = "leave";
 
     /**
      * log room constant
@@ -120,29 +120,45 @@ public final class App {
                     }
                 } else if (cmd.hasOption(ENTER_ROOM)) {
                     String args[] = cmd.getOptionValues(ENTER_ROOM);
-                    String person = args[0];
-                    String room = args[1];
-                    if (person != null && !person.isEmpty() && room != null && !room.isEmpty()) {
-                        cr.enterRoom(person, room);
+                    if(args.length < 2){
+                        System.out.println("Missing arguments");
+                    } else {
+                        String person = args[0];
+                        String room = args[1];
+                        if (person != null && !person.isEmpty() && room != null && !room.isEmpty()) {
+                            cr.enterRoom(person, room);
+                        }
                     }
                 } else if (cmd.hasOption(LEAVE_ROOM)) {
                     String args[] = cmd.getOptionValues(LEAVE_ROOM);
-                    String person = args[0];
-                    String room = args[1];
-                    if (person != null && !person.isEmpty() && room != null && !room.isEmpty()) {
-                        cr.leaveRoom(person, room);
+                    if(args.length < 2){
+                        System.out.println("Missing arguments");
+                    } else {
+                        String person = args[0];
+                        String room = args[1];
+                        if (person != null && !person.isEmpty() && room != null && !room.isEmpty()) {
+                            cr.leaveRoom(person, room);
+                        }
                     }
                 } else if (cmd.hasOption(LOG_ROOM)) {
                     String args[] = cmd.getOptionValues(LOG_ROOM);
-                    String room = args[0];
-                    if (room != null && !room.isEmpty()) {
-                        cr.showRoomActivity(room);
+                    if(args.length < 1){
+                        System.out.println("Missing arguments");
+                    } else {
+                        String room = args[0];
+                        if (room != null && !room.isEmpty()) {
+                            cr.showRoomActivity(room);
+                        }
                     }
                 } else if (cmd.hasOption(PERSON_MOVES)) {
                     String args[] = cmd.getOptionValues(PERSON_MOVES);
-                    String person = args[0];
-                    if (person != null && !person.isEmpty()) {
-                        cr.showPersonActivity(person);
+                    if(args.length < 1){
+                        System.out.println("Missing arguments");
+                    } else {
+                        String person = args[0];
+                        if (person != null && !person.isEmpty()) {
+                            cr.showPersonActivity(person);
+                        }
                     }
                 }
 

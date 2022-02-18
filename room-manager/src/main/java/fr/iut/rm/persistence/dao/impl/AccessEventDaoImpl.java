@@ -48,7 +48,6 @@ public class AccessEventDaoImpl implements AccessEventDao {
      * Find an accessEvent
      *
      * @param username name of the user
-     * @param room room
      * @return the corresponding access event or null if nothing found
      */
     @Override
