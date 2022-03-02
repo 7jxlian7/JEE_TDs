@@ -118,7 +118,7 @@ public class ControlRoom {
                     unitOfWork.end();
                     return;
                 }
-                // if he wants to enter anither the room (he must leave one before)
+                // if he wants to enter another the room (he must leave one before)
                 unitOfWork.end();
                 leaveRoom(username, accessEvent.getRoom().getName());
                 unitOfWork.begin();
