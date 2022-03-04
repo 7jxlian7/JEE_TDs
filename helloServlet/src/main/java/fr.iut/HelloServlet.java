@@ -1,3 +1,5 @@
+package fr.iut;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -22,8 +24,8 @@ public class HelloServlet extends HttpServlet {
         out.println( "<p>Bienvenue sur ma <span class=\"red\">page</span> !</p>" );
         out.println( "<style>" +
                     ".red { color: red; }" +
+                    " body { background: url(https://www.zooplus.fr/magazine/wp-content/uploads/2019/06/arriv%C3%A9e-dun-chaton-%C3%A0-la-maison.jpeg); }" +
                     "</style>" );
-        out.println("<img src=\"https://www.zooplus.fr/magazine/wp-content/uploads/2019/06/arriv%C3%A9e-dun-chaton-%C3%A0-la-maison.jpeg\" alt=\"Image de petit chatoooon\" />");
         out.println( "</BODY>" );
         out.println( "</HTML>" );
         out.close();
