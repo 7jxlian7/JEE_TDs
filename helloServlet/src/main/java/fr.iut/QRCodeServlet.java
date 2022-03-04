@@ -23,7 +23,7 @@ public class QRCodeServlet extends HttpServlet {
         QRCodeWriter writer = new QRCodeWriter();
         BitMatrix bitMatrix = null;
         try {
-            String url = "coucou";
+            String url = "https://imjulian.fr";
             bitMatrix = writer.encode(url, BarcodeFormat.QR_CODE, 300, 300);
         } catch (WriterException e) { e.printStackTrace(); }
         response.setContentType("image/png");
