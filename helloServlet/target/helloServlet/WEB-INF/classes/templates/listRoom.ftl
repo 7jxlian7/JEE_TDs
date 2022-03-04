@@ -5,12 +5,12 @@
     <title>${title}</title>
 </head>
 <body>
-<h2>List of FakeRooms</h2>
+<h2>${title}</h2>
 <p></p>
 <ul>
     <#list fakeRooms as room>
         <li>
-            ${room.name} : ${room.getOccupation()} / ${room.capacity}
+            ${room.name} : ${room.occupation} / ${room.capacity}
         </li>
     </#list>
 </ul>
