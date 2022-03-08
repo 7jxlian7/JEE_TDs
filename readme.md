@@ -30,5 +30,6 @@ It was created to learn how API's works.
 
 We learn how to validation data using annotations tags.
 
-  
+<hr>
+
 Created by Julian FORME on 08/12/2022.
