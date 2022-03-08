@@ -19,6 +19,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -218,9 +219,8 @@ public class RoomResource {
     }
 
     /**
-     * List all accessEvents for a room
+     * Delete an accessEvent
      *
-     * @return all defined accessEvents
      */
     @DELETE
     @Path("/{roomId}/events/{eventId}")
@@ -237,5 +237,37 @@ public class RoomResource {
             return;
 
         accessEventDao.delete(ae);
+    }
+
+    /**
+     * Fill all rooms with multiple accessEvents
+     *
+     */
+    @POST
+    @Path("/fill")
+    @Consumes({MediaType.APPLICATION_JSON + "; charset=UTF-8"})
+    public void fillRooms() {
+        logger.debug("Fill all rooms with multiple accessEvents");
+
+        List<String> usernames = new ArrayList<>(Arrays.asList("Julian", "Mathis", "Antoine", "Thomas", "Pierre"));
+
+        List<Room> rooms = roomDao.findAll();
+
+        /**
+         * Add 2 accessEvents (IN & OUT) for each usernames for each rooms in our database
+         */
+        rooms.forEach(r -> {
+            usernames.forEach(u -> {
+                for(int i = 0; i <= 1; i++) {
+                    AccessEvent ae = new AccessEvent();
+                    EventType eventType = i == 0 ? EventType.IN : EventType.OUT;
+                    ae.setType(eventType);
+                    ae.setRoom(r);
+                    ae.setUserName(u);
+                    ae.setDateTime(new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                    accessEventDao.saveOrUpdate(ae);
+                }
+            });
+        });
     }
 }
