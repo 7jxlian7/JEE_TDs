@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
 import fr.iut.rm.persistence.dao.RoomDao;
+import fr.iut.rm.persistence.domain.AccessEvent;
 import fr.iut.rm.persistence.domain.Room;
 import fr.iut.rm.persistence.domain.Room_;
 import org.slf4j.Logger;
@@ -67,6 +68,14 @@ public class RoomDaoImpl implements RoomDao {
 
         logger.debug("{} rooms matching name query {}", results.size(), name);
         return results;
+    }
+
+
+    @Transactional
+    @Override
+    public void delete(final Room room) {
+        logger.debug("Removing room with id {}", room == null ? "null" : room.getId());
+        this.em.get().remove(room);
     }
 
 

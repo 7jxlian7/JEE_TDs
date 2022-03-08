@@ -56,7 +56,6 @@ public class RoomResource {
     @Produces({MediaType.APPLICATION_JSON + "; charset=UTF-8"})
     public List<RoomVO> listRooms(@QueryParam("q") String query) {
         logger.debug("List all rooms");
-        // TODO add a query parameter (@QueryParam) to filter on room names using roomDao.searchByName method
 
         List<Room> rooms;
 
@@ -140,6 +139,28 @@ public class RoomResource {
     }
 
     /**
+     * Delete all rooms
+     *
+     */
+    @DELETE
+    @Consumes({MediaType.APPLICATION_JSON + "; charset=UTF-8"})
+    public void deleteRooms() {
+        logger.debug("Delete all rooms");
+
+        List<Room> rooms = roomDao.findAll();
+
+        rooms.forEach(r -> {
+            // Delete all access events
+            List<AccessEvent> accessEvents = accessEventDao.findBy(r.getId(), null);
+            accessEvents.forEach(ae -> {
+                accessEventDao.delete(ae);
+            });
+            // Delete the room
+            roomDao.delete(r);
+        });
+    }
+
+    /**
      * Creates an AccessEvent
      *
      * @param accessEventVO accessEvent to apply
@@ -204,9 +225,7 @@ public class RoomResource {
         }).collect(Collectors.toList());
 
         if(type != null && (type.equals("IN") || type.equals("OUT"))){
-
             List<AccessEventVO> listWithType = new ArrayList<>();
-
             accessEventsVO.forEach(ae -> {
                 if(ae.getType().toString().equals(type))
                     listWithType.add(ae);

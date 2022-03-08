@@ -1,5 +1,6 @@
 package fr.iut.rm.persistence.dao;
 
+import fr.iut.rm.persistence.domain.AccessEvent;
 import fr.iut.rm.persistence.domain.Room;
 
 import java.util.List;
@@ -44,5 +45,12 @@ public interface RoomDao {
      * @return the room or null if nothing found
      */
     Room findByName(String name);
+
+    /**
+     * Remove room entity from db
+     *
+     * @param room entity to delete
+     */
+    void delete(Room room);
 
 }
