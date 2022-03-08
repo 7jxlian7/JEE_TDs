@@ -3,7 +3,7 @@
 if test -z "$*" 
 then
      echo "Error : Missing parameters"
-     echo "Usage : : ./create_room.sh <Room's name>"
+     echo "Usage : : ./create_room.sh <name> OPTIONAL: <description>"
      exit 1
 fi
 
