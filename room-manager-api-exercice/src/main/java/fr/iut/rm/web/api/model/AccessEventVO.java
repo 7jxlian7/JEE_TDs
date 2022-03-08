@@ -6,6 +6,11 @@ import javax.persistence.*;
 
 public class AccessEventVO {
     /**
+     * AccessEvent's identifier.
+     */
+    private long id;
+
+    /**
      * Event target user name.
      */
     @Column
@@ -32,5 +37,13 @@ public class AccessEventVO {
 
     public void setType(EventType type) {
         this.type = type;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
